@@ -494,8 +494,10 @@
   // -------------------- Socket Events --------------------
   socket.on('connect', () => {
     elements.reconnectBanner.classList.add('hidden');
-    socket.emit('join', { room: currentRoom, username: currentUsername, password: storedPassword, settings: storedSettings });
-  });
+    socket.on('connect', () => {
+      elements.reconnectBanner.classList.add('hidden');
+      socket.emit('join', { room: currentRoom, username: currentUsername, password: storedPassword, settings: storedSettings });
+    });
   socket.on('disconnect', () => elements.reconnectBanner.classList.remove('hidden'));
   socket.on('connect_error', () => elements.reconnectBanner.classList.remove('hidden'));
 
@@ -749,5 +751,7 @@
     "color: #ff006e; font-size: 10px;");
 
   // Initial join
-  socket.emit('join', { room: currentRoom, username: currentUsername, password: storedPassword, settings: storedSettings });
-})();
+ socket.on('connect', () => {
+      elements.reconnectBanner.classList.add('hidden');
+      socket.emit('join', { room: currentRoom, username: currentUsername, password: storedPassword, settings: storedSettings });
+    });
