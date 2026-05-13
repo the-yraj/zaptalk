@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ZapTalk – Anonymous Chat</title>
+  <meta name="description" content="Real-time anonymous chat with AI, media, and privacy controls.">
+  <meta property="og:title" content="ZapTalk">
+  <meta property="og:description" content="Chat anonymously, share media, talk to AI bot.">
+  <meta property="og:image" content="/icon-512.png">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <meta name="theme-color" content="#03070f">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="landing-page fade-in">
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="corner-brackets">
+    <div class="corner top-left"></div>
+    <div class="corner top-right"></div>
+    <div class="corner bottom-left"></div>
+    <div class="corner bottom-right"></div>
+  </div>
+
+  <div class="center-card">
+    <div class="logo neon-flicker">⚡ ZAPTALK</div>
+    <div class="subtitl">anonymous • realtime • encrypted vibe</div>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="HANDLE" autocomplete="off" class="cyber-input">
+    </div>
+    <div class="input-group">
+      <input type="text" id="roomCode" placeholder="ROOM CODE" autocomplete="off" class="cyber-input">
+    </div>
+    <div class="input-group password-wrapper">
+      <input type="password" id="roomPassword" placeholder="ROOM PASSWORD (OPTIONAL)" class="cyber-input">
+      <span class="toggle-pwd" id="togglePwd">👁️</span>
+    </div>
+
+    <details class="settings-details">
+      <summary>⚙️ Room Settings (creator only)</summary>
+      <div class="settings-panel">
+        <label>Auto-delete timer:</label>
+        <select id="deleteTimer">
+          <option value="none">None</option>
+          <option value="1h">1 hour</option>
+          <option value="6h">6 hours</option>
+          <option value="24h">24 hours</option>
+        </select>
+        <label>Max users:</label>
+        <input type="number" id="maxUsers" min="2" max="200" value="50">
+        <label><input type="checkbox" id="noLogMode"> 🔒 No-Log Mode (messages not stored)</label>
+      </div>
+    </details>
+
+    <button id="joinBtn" class="hex-btn">⚡ JOIN ROOM ⚡</button>
+    <div id="joinError" class="error-message hidden"></div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').catch(err => console.log('SW error:', err));
+      });
+    }
+    const toggleBtn = document.getElementById('togglePwd');
+    const pwdInput = document.getElementById('roomPassword');
+    toggleBtn.addEventListener('click', () => {
+      const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwdInput.setAttribute('type', type);
+    });
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      const username = document.getElementById('username').value.trim();
+      const room = document.getElementById('roomCode').value.trim().toUpperCase();
+      const password = document.getElementById('roomPassword').value;
+      const deleteTimer = document.getElementById('deleteTimer').value;
+      const maxUsers = parseInt(document.getElementById('maxUsers').value, 10);
+      const noLogMode = document.getElementById('noLogMode').checked;
+      if (!username || !room) {
+        showError('Please enter both username and room code');
+        return;
+      }
+      if (maxUsers < 2 || maxUsers > 200) {
+        showError('Max users must be between 2 and 200');
+        return;
+      }
+      sessionStorage.setItem('zaptalk_password', password);
+      sessionStorage.setItem('zaptalk_settings', JSON.stringify({ deleteTimer, maxUsers, noLogMode }));
+      window.location.href = `chat.html?room=${encodeURIComponent(room)}&user=${encodeURIComponent(username)}`;
+    });
+    function showError(msg) {
+      const errDiv = document.getElementById('joinError');
+      errDiv.innerText = msg;
+      errDiv.classList.remove('hidden');
+      setTimeout(() => errDiv.classList.add('hidden'), 4000);
+    }
+  </script>
+</body>
+</html>
