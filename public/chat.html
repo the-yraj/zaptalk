@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ZapTalk – Chat</title>
+  <meta name="description" content="ZapTalk real-time chat with AI bot, media, and privacy.">
+  <meta property="og:title" content="ZapTalk Chat">
+  <meta property="og:description" content="Join the conversation with AI assistance.">
+  <meta property="og:image" content="/icon-512.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="chat-page dark-theme fade-in">
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="corner-brackets">
+    <div class="corner top-left"></div>
+    <div class="corner top-right"></div>
+    <div class="corner bottom-left"></div>
+    <div class="corner bottom-right"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden">
+    <span class="close-lightbox">&times;</span>
+    <img id="lightbox-img" src="">
+  </div>
+
+  <!-- Reconnect banner -->
+  <div id="reconnectBanner" class="reconnect-banner hidden">⚠️ Disconnected – Reconnecting...</div>
+
+  <!-- Search bar -->
+  <div id="searchBar" class="search-bar hidden">
+    <input type="text" id="searchInput" placeholder="Search messages..." class="cyber-input small">
+    <span id="searchResultsCount" class="search-count">0 results</span>
+    <button id="closeSearchBtn" class="close-search">✕</button>
+  </div>
+
+  <!-- LEFT SLIDE PANEL -->
+  <div id="leftPanelOverlay" class="panel-overlay"></div>
+  <div id="leftPanel" class="slide-panel left">
+    <div class="panel-header"><span>🌀 ROOMS</span><button class="close-panel" id="closeLeftPanel">✕</button></div>
+    <div id="roomsList" class="rooms-list">Loading...</div>
+    <div class="quick-join">
+      <div class="quick-title">🔮 Quick Join</div>
+      <input type="text" id="quickRoomCode" placeholder="Room Code" class="cyber-input small">
+      <input type="password" id="quickPassword" placeholder="Password (opt)" class="cyber-input small">
+      <button id="quickJoinBtn" class="small-hex">JOIN</button>
+    </div>
+  </div>
+
+  <!-- RIGHT SLIDE PANEL -->
+  <div id="rightPanelOverlay" class="panel-overlay"></div>
+  <div id="rightPanel" class="slide-panel right">
+    <div class="panel-header"><span>👥 MEMBERS & STATS</span><button class="close-panel" id="closeRightPanel">✕</button></div>
+    <div id="membersList" class="members-list">Loading...</div>
+    <div class="room-stats">
+      <div>📊 <span id="statsToday">0</span> msgs today</div>
+      <div>⏳ Timer: <span id="statsTimer">None</span></div>
+      <div>👥 Capacity: <span id="statsCapacity">0/0</span></div>
+      <div>📡 Ping: <span id="statsPing">--</span> ms</div>
+      <div id="noLogBadge" class="badge-nolog hidden">🔒 NO-LOG MODE</div>
+    </div>
+  </div>
+
+  <!-- MAIN CHAT -->
+  <div class="chat-container">
+    <header class="chat-header">
+      <div class="logo-small neon-flicker">⚡ ZAPTALK</div>
+      <div class="room-badge">
+        <span id="roomCodeBadge">ROOM</span>
+        <span id="onlineBadge" class="online-pill">⬤ 0</span>
+        <span id="noLogHeaderBadge" class="nolog-header hidden">🔒 NO-LOG</span>
+      </div>
+      <div class="header-actions">
+        <button id="searchToggleBtn" class="icon-btn">🔍</button>
+        <button id="themeToggleBtn" class="icon-btn">🌙</button>
+        <button id="soundToggleBtn" class="icon-btn">🔔</button>
+        <button id="toggleLeftBtn" class="icon-btn">☰</button>
+        <button id="toggleRightBtn" class="icon-btn">👥</button>
+      </div>
+    </header>
+
+    <div id="globalTypingIndicator" class="typing-indicator" style="display: none;"></div>
+    <div id="messagesArea" class="messages-area">
+      <div class="empty-state">⚡ Start the conversation</div>
+    </div>
+
+    <button id="scrollToBottomBtn" class="scroll-bottom-btn hidden">⬇</button>
+
+    <div class="input-bar">
+      <button id="attachBtn" class="action-icon">📎</button>
+      <button id="voiceBtn" class="action-icon voice-record-btn">🎙️</button>
+      <div class="text-input-wrapper">
+        <div id="replyPreview" class="reply-preview hidden">
+          <div class="reply-quote">↩ Replying to <span id="replyToUser"></span>: <span id="replyToText"></span></div>
+          <button id="cancelReplyBtn" class="cancel-reply">✕</button>
+        </div>
+        <input type="text" id="messageInput" class="cyber-input message-input" placeholder="TYPE YOUR MESSAGE... ( /ask question )">
+        <button id="emojiBtn" class="emoji-icon">😄</button>
+      </div>
+      <button id="sendBtn" class="hex-send">⚡</button>
+    </div>
+  </div>
+
+  <div id="recordingIndicator" class="recording-indicator hidden">🎙️ Recording... 0:00</div>
+  <div id="emojiPicker" class="emoji-picker hidden">
+    <span>😀</span><span>😂</span><span>😍</span><span>🔥</span><span>💀</span><span>✨</span>
+    <span>💻</span><span>🎉</span><span>❤️</span><span>🤖</span><span>👾</span><span>👍</span>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
