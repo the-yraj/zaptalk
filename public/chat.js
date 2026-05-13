@@ -656,9 +656,13 @@
   });
 
   // Voice recording
+  // Desktop
   elements.voiceBtn.addEventListener('mousedown', startRecording);
   elements.voiceBtn.addEventListener('mouseup', stopRecording);
   elements.voiceBtn.addEventListener('mouseleave', stopRecording);
+  // Mobile
+  elements.voiceBtn.addEventListener('touchstart', startRecording);
+  elements.voiceBtn.addEventListener('touchend', stopRecording);
 
   // Theme toggle
   function setTheme(theme) {
